@@ -1,19 +1,21 @@
 import pickle
 import sys
 
-
 def menu():
     print("1 - Odszukaj adres email")
-    print("2 - dodaj nowe imię i adres email")
-    print("3 - zmień istniejący adres email")
-    print("4 - usuń email")
-    print("5 - Zapisz efekt pracy i zakończ")
-    print("6 - Pokaż wszystkie wpisy")
+    print("2 - Dodaj nowe imię i adres email")
+    print("3 - Zmień istniejący adres email")
+    print("4 - Usuń email")
+    print("5 - Pokaż wszystkie wpisy")
+    print("6 - Zapisz efekt pracy i zakończ")
     print()
 
-
-    plik=open("bazaemail.dat","rb")
-    slownik=pickle.load(plik)
+    try:
+        plik=open("bazaemail.dat","rb")
+        slownik = pickle.load(plik)
+    except:
+        plik = open("bazaemail.dat", "wb")
+        slownik={}
     plik.close()
 
     wybor=input()
@@ -25,63 +27,52 @@ def menu():
         zmien(slownik)
     if wybor == "4":
         usun(slownik)
-    if wybor =="5":
-        zapisz(slownik)
-    if wybor == "6":
+    if wybor == "5":
         wszystkie(slownik)
+    if wybor =="6":
+        zapisz(slownik)
+
 
 def zmien(slownik):
     odp = "T"
     while odp.upper() == "T":
-        dozmiany=input("Podaj imię osoby, której email chcesz zmienić")
+        dozmiany=input("Podaj imię osoby, której email chcesz zmienić: "+"\n")
         if dozmiany in slownik:
-            nowawartosc=input("Podaj nowy adres email:")
+            nowawartosc=input("Podaj nowy adres email: "+"\n")
             slownik[dozmiany]=nowawartosc
-            print(("Dane zmienione"))
-            odp=input("Czy chcesz zmienić dane kolejnej osoby? t/T")
-            print()
+            print(("Dane zmienione."+"\n"))
         else:
-            print("Nie znalazłem takiej osoby")
-            odp = input("Czy chcesz zmienić dane kolejnej osoby? t/T")
-            print()
+            print("Nie znalazłem takiej osoby"+"\n")
+        odp = input("Czy chcesz zmienić dane kolejnej osoby? Wpisz \"T\"(Enter) by kontynuować lub \"Enter\" aby przejść do menu."+"\n")
     plik = open("bazaemail.dat", "wb")
     pickle.dump(slownik,plik)
     plik.close()
     menu()
-    return slownik
-
 
 def usun(slownik):
     odp = "T"
     while odp.upper() == "T":
-        dousuniecia=input("Podaj imię do usunięcia:")
+        dousuniecia=input("Podaj imię do usunięcia: "+"\n")
         if dousuniecia in slownik:
             del slownik[dousuniecia]
-            print(dousuniecia,"został usunięty")
-            odp = input("Czy chcesz usunąć kolejną osobę?")
-            print()
+            print(dousuniecia,"został usunięty"+"\n")
         else:
-            print("Nie znaleziono!")
-            odp = input("Czy chcesz usunąć kolejną osobę?")
-            print()
+            print("Nie znaleziono!"+"\n")
+        odp = input("Czy chcesz usunąć kolejną osobę?  Wpisz \"T\"(Enter) by kontynuować lub \"Enter\" aby przejść do menu."+"\n")
     plik = open("bazaemail.dat", "wb")
     pickle.dump(slownik, plik)
     plik.close()
     menu()
-    return slownik
 
 def znajdz(slownik):
     odp="T"
     while odp.upper() == "T":
-        szukaj=input("Wpisz imię, którego szukasz"+"\n")
-
+        szukaj=input("Wpisz imię, którego szukasz: "+"\n")
         if szukaj in slownik:
-            print(szukaj,"ma maila:",slownik[szukaj])
-            odp = input("Czy chcesz szukać kolejnej osoby t/T"+"\n")
-
+            print(szukaj,"ma maila:",slownik[szukaj]+"\n")
         else:
-            print("Nie znalazłem takiej osoby")
-            odp = input("Czy chcesz szukać kolejnej osoby t/T"+"\n")
+            print("Nie znalazłem takiej osoby."+"\n")
+        odp = input("Jeśli chcesz szukać następnej osoby wpisz \"T\"(Enter) by kontynuować lub \"Enter\" aby przejść do menu. "+"\n")
 
     menu()
     
@@ -89,32 +80,36 @@ def zapisz(slownik):
     plik = open("bazaemail.dat", "wb")
     pickle.dump(slownik,plik)
     plik.close()
-    print("Baza email została zapisana")
+    print("Baza email została zapisana."+"\n")
     sys.exit()
 
 
 def dodaj(slownik):
     odp="T"
     while odp.upper() == "T":
-        imie=input("Podaj imię właściciela emaila"+"\n")
+        imie=input("Podaj imię nowej osoby: "+"\n")
         if imie in slownik:
-            print("Przykro mi, ale ta osoba już istnieje"+"\n")
+            print("Przykro mi, ale ta osoba już istnieje."+"\n")
         else:
 
-            email=input("Podaj email"+"\n")
+            email=input("Podaj email: "+"\n")
             slownik[imie]=email
-            print("email pozytywnie dodany")
-            print("Jeśli chcesz dodać email wpisz 't' lub 'T' "+"\n")
+            print("Email został pozytywnie dodany."+"\n")
+            print("Jeśli chcesz dodać następny email wpisz \"T\"(Enter) by kontynuować lub \"Enter\" aby przejść do menu. "+"\n")
             odp = input()
 
     plik = open("bazaemail.dat", "wb")
     pickle.dump(slownik, plik)
     plik.close()
     menu()
-    return slownik
 
 def wszystkie(slownik):
     k=slownik.items()
-    for a,b in k:
-        print(a,b)
+    if slownik=={}:
+        print("Baza danych jest pusta!"+"\n\n")
+    else:
+        for a,b in k:
+            print(a,b)
+        print("\n")
+    menu()
 menu()
