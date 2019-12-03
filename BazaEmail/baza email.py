@@ -7,7 +7,7 @@ def menu():
     print("3 - Zmień istniejący adres email")
     print("4 - Usuń email")
     print("5 - Pokaż wszystkie wpisy")
-    print("6 - Zapisz efekt pracy i zakończ")
+    print("6 - Zakończ działanie programu")
     print()
 
     try:
@@ -30,7 +30,7 @@ def menu():
     if wybor == "5":
         wszystkie(slownik)
     if wybor =="6":
-        zapisz(slownik)
+        wyjdz()
 
 
 def zmien(slownik):
@@ -73,16 +73,10 @@ def znajdz(slownik):
         else:
             print("Nie znalazłem takiej osoby."+"\n")
         odp = input("Jeśli chcesz szukać następnej osoby wpisz \"T\"(Enter) by kontynuować lub \"Enter\" aby przejść do menu. "+"\n")
-
     menu()
     
-def zapisz(slownik):
-    plik = open("bazaemail.dat", "wb")
-    pickle.dump(slownik,plik)
-    plik.close()
-    print("Baza email została zapisana."+"\n")
+def wyjdz():
     sys.exit()
-
 
 def dodaj(slownik):
     odp="T"
@@ -91,13 +85,11 @@ def dodaj(slownik):
         if imie in slownik:
             print("Przykro mi, ale ta osoba już istnieje."+"\n")
         else:
-
             email=input("Podaj email: "+"\n")
             slownik[imie]=email
             print("Email został pozytywnie dodany."+"\n")
             print("Jeśli chcesz dodać następny email wpisz \"T\"(Enter) by kontynuować lub \"Enter\" aby przejść do menu. "+"\n")
             odp = input()
-
     plik = open("bazaemail.dat", "wb")
     pickle.dump(slownik, plik)
     plik.close()
